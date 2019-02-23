@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hello WebSocket</title>
+    <script src="jquery.js"></script>
+    <script src="sockjs.js"></script>
+    <script src="stomp.js"></script>
+    <script src="app.js"></script>
+</head>
+<body>
+<div>
+    <div>
+        <div>
+            <form>
+                <div class="form-group">
+                    <label for="connect">WebSocket connection:</label>
+                    <button id="connect" type="submit">Subscribe</button>
+                    <button id="disconnect" type="submit" disabled="disabled">Unsubscribe</button>
+                </div>
+            </form>
+        </div>
+        <div>
+            <form>
+                <div>
+                    <label for="add_pair">Enter currecny pair:</label>
+                    <input type="text" id="add_pair" placeholder="Example: BTC_USD" value="BTC_USD">
+                </div>
+                <div>
+                    <label for="add_limit">Enter currecny pair:</label>
+                    <input type="text" id="add_limit" placeholder="Example: 10000000" value="500">
+                </div>
+                <button id="submit_alert"type="submit">Submit alert</button>
+            </form>
+        </div>
+        <div>
+            <form>
+                <div>
+                    <label for="remove_pair">Enter currecny pair:</label>
+                    <input type="text" id="remove_pair" placeholder="Example: BTC_USD" value="BTC_USD">
+                </div>
+                <div>
+                    <label for="remove_limit">Enter currecny pair:</label>
+                    <input type="text" id="remove_limit" placeholder="Example: 10000000" value="500">
+                </div>
+                <button id="delete_alert"type="submit">Delete alert</button>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <table id="conversation" class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Alerts</th>
+                </tr>
+                </thead>
+                <tbody id="alerts_table">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

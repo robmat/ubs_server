@@ -1,13 +1,17 @@
 package edu.bator.services;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 import edu.bator.model.AlertSubscription;
+import edu.bator.model.CurrentPrice;
 import lombok.extern.slf4j.Slf4j;
+import org.knowm.xchange.Exchange;
 import org.knowm.xchange.currency.CurrencyPair;
-import org.springframework.security.core.Authentication;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,16 +20,31 @@ public class AlertsService {
 
     private Set<AlertSubscription> alertsDb = new ConcurrentSkipListSet<>();
 
-    public void addAlert(Authentication authentication, CurrencyPair pair, BigDecimal limit) {
-        log.debug("addAlert([{}] [{}] [{}])", authentication, pair, limit);
+    private final Exchange exchange;
 
-        alertsDb.add(AlertSubscription.builder().pair(pair).limit(limit).build());
+    @Autowired
+    public AlertsService(Exchange exchange) {
+        this.exchange = exchange;
     }
 
-    public void removeAlert(Authentication authentication, CurrencyPair pair, BigDecimal limit) {
-        log.debug("removeAlert([{}] [{}] [{}])", authentication, pair, limit);
+    public CurrentPrice addAlert(CurrencyPair pair, BigDecimal limit) throws IOException {
+        log.debug("addAlert([{}] [{}] [{}])", pair, limit);
+
+        alertsDb.add(AlertSubscription.builder().pair(pair).limit(limit).build());
+        return currentPrice(pair);
+    }
+
+    public CurrentPrice removeAlert(CurrencyPair pair, BigDecimal limit) throws IOException {
+        log.debug("removeAlert([{}] [{}] [{}])", pair, limit);
 
         alertsDb.remove(AlertSubscription.builder().pair(pair).limit(limit).build());
+        return currentPrice(pair);
+    }
+
+    private CurrentPrice currentPrice(CurrencyPair pair) throws IOException {
+        return Optional.ofNullable(exchange.getMarketDataService().getTicker(pair))
+                .map(ticker -> CurrentPrice.builder().price(ticker.getLast()).currencyPair(pair).build())
+                .orElse(null);
     }
 
     Set<AlertSubscription> getAlertsDb() {
@@ -33,6 +52,10 @@ public class AlertsService {
     }
 
     public void removeAlert(AlertSubscription alertSubscription) {
-        removeAlert(null, alertSubscription.getPair(), alertSubscription.getLimit());
+        try {
+            removeAlert(alertSubscription.getPair(), alertSubscription.getLimit());
+        } catch (IOException e) {
+            log.error("Unable to remove alert due to: ", e);
+        }
     }
 }

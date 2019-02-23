@@ -4,7 +4,6 @@ import java.util.Objects;
 
 import edu.bator.model.AlertNotification;
 import edu.bator.model.AlertSubscription;
-import edu.bator.web.controllers.WebsocketController;
 import lombok.extern.slf4j.Slf4j;
 import org.knowm.xchange.dto.marketdata.Ticker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import static edu.bator.web.controllers.AlertsController.ALERTS_PATH;
-import static edu.bator.web.controllers.WebsocketController.TOPIC_PATH;
+import static edu.bator.web.controllers.AlertsController.TOPIC_PATH;
 
 @Service
 @Slf4j

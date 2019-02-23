@@ -65,7 +65,7 @@ class PriceChangeNotificationServiceTest {
 
         //then
         ArgumentCaptor<AlertNotification> alertNotification = ArgumentCaptor.forClass(AlertNotification.class);
-        verify(template, times(2)).convertAndSend(eq("/alerts"), alertNotification.capture());
+        verify(template, times(2)).convertAndSend(eq("/topic/alerts"), alertNotification.capture());
         assertThat(alertNotification.getAllValues()).hasSize(2);
         assertThat(alertNotification.getAllValues().get(0).getCurrencyPair()).isEqualTo(BTC_USD);
         assertThat(alertNotification.getAllValues().get(1).getCurrencyPair()).isEqualTo(BTC_USD);
