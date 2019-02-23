@@ -1,10 +1,14 @@
 package edu.bator.config.converters;
 
+import javax.annotation.PostConstruct;
+
 import org.knowm.xchange.currency.CurrencyPair;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CurrencyPairConverter implements Converter<String, CurrencyPair> {
+
     @Override
     public CurrencyPair convert(String source) {
         if (source.contains("-")) {

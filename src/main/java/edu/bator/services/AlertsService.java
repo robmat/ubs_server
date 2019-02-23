@@ -1,7 +1,6 @@
 package edu.bator.services;
 
 import java.math.BigDecimal;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 
@@ -31,5 +30,9 @@ public class AlertsService {
 
     Set<AlertSubscription> getAlertsDb() {
         return alertsDb;
+    }
+
+    public void removeAlert(AlertSubscription alertSubscription) {
+        removeAlert(null, alertSubscription.getPair(), alertSubscription.getLimit());
     }
 }
