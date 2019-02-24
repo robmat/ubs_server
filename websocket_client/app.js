@@ -44,7 +44,6 @@ function submitAlert() {
       url: "http://localhost:8080/alert?pair=" + pair + "&limit=" + limit,
       type: "PUT",
       beforeSend: function (xhr) {
-          xhr.setRequestHeader("Authorization", "Basic " + btoa("ubs:ubs_passwd"));
           xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
       },
       success: function(data) {

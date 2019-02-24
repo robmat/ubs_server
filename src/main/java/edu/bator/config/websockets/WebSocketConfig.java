@@ -9,7 +9,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Configuration
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-    private static final String WEBSOCKET_ENDPOIINT = "/websocket-endpoint";
+    public static final String WEBSOCKET_ENDPOIINT = "/websocket-endpoint";
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
