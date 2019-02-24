@@ -44,31 +44,25 @@ class PriceCheckScheduledServiceTest {
     @Test
     @DisplayName("Notify PriceChangeNotificationService about new ticker on supported pair")
     void checkPriceForSupportedPair() throws IOException {
-        //with
         when(exchange.getMarketDataService()).thenReturn(marketDataService);
         when(exchange.getExchangeSymbols()).thenReturn(List.of(BTC_USD));
 
         Ticker ticker = new Ticker.Builder().currencyPair(BTC_USD).build();
         when(marketDataService.getTicker(BTC_USD)).thenReturn(ticker);
 
-        //when
         priceCheckScheduledService.checkPrice();
 
-        //then
         verify(priceChangeNotificationService).checkAndNotifyClients(ticker);
     }
 
     @Test
     @DisplayName("Do not notify PriceChangeNotificationService about new ticker on unsupported pair")
     void checkPriceForUnsupportedPair() throws IOException {
-        //with
         when(exchange.getMarketDataService()).thenReturn(marketDataService);
         when(exchange.getExchangeSymbols()).thenReturn(List.of(ETH_CNY));
 
-        //when
         priceCheckScheduledService.checkPrice();
 
-        //then
         verifyZeroInteractions(priceChangeNotificationService);
     }
 }

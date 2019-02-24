@@ -31,7 +31,7 @@ public class PriceCheckScheduledService {
         this.priceChangeNotificationService = priceChangeNotificationService;
     }
 
-    @Scheduled(fixedRateString = "${check.price.rate}")
+    @Scheduled(fixedRateString = "${check.price.rate}", initialDelayString = "${check.price.delay}")
     public void checkPrice() throws IOException {
         log.debug("checkPrice() starts");
 

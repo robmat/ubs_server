@@ -1,3 +1,4 @@
 check:
   price:
     rate: 60000
+    delay: 1000

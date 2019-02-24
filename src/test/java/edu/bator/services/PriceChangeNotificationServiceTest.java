@@ -9,6 +9,7 @@ import java.util.TreeSet;
 import edu.bator.model.AlertNotification;
 import edu.bator.model.AlertSubscription;
 import org.assertj.core.api.Assertions;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -44,6 +45,8 @@ class PriceChangeNotificationServiceTest {
     @Mock
     private SimpMessagingTemplate template;
 
+    private SoftAssertions soft = new SoftAssertions();
+
     @BeforeEach
     void setUp() {
         priceChangeNotificationService = new PriceChangeNotificationService(alertsService, template);
@@ -52,24 +55,21 @@ class PriceChangeNotificationServiceTest {
     @Test
     @DisplayName("Should send two notification for two limits passed ")
     void checkAndNotifyClients() {
-        //with
         Set<AlertSubscription> alertSubscriptions = new TreeSet<>();
         alertSubscriptions.add(AlertSubscription.builder().pair(BTC_USD).limit(ZERO).build());
         alertSubscriptions.add(AlertSubscription.builder().pair(BTC_USD).limit(TEN).build());
         alertSubscriptions.add(AlertSubscription.builder().pair(BTC_USD).limit(ONE).build());
         when(alertsService.getAlertsDb()).thenReturn(alertSubscriptions);
 
-        //when
         Ticker ticker = new Ticker.Builder().last(new BigDecimal("1.5")).currencyPair(BTC_USD).build();
         priceChangeNotificationService.checkAndNotifyClients(ticker);
 
-        //then
         ArgumentCaptor<AlertNotification> alertNotification = ArgumentCaptor.forClass(AlertNotification.class);
         verify(template, times(2)).convertAndSend(eq("/topic/alerts"), alertNotification.capture());
-        assertThat(alertNotification.getAllValues()).hasSize(2);
-        assertThat(alertNotification.getAllValues().get(0).getCurrencyPair()).isEqualTo(BTC_USD);
-        assertThat(alertNotification.getAllValues().get(1).getCurrencyPair()).isEqualTo(BTC_USD);
-        assertThat(alertNotification.getAllValues().get(0).getLimit()).isEqualTo(ZERO);
-        assertThat(alertNotification.getAllValues().get(1).getLimit()).isEqualTo(ONE);
+        soft.assertThat(alertNotification.getAllValues()).hasSize(2);
+        soft.assertThat(alertNotification.getAllValues().get(0).getCurrencyPair()).isEqualTo(BTC_USD);
+        soft.assertThat(alertNotification.getAllValues().get(1).getCurrencyPair()).isEqualTo(BTC_USD);
+        soft.assertThat(alertNotification.getAllValues().get(0).getLimit()).isEqualTo(ZERO);
+        soft.assertThat(alertNotification.getAllValues().get(1).getLimit()).isEqualTo(ONE);
     }
 }

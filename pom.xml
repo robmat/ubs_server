@@ -201,7 +201,7 @@
                 <version>2.22.1</version>
                 <configuration>
                     <includes>
-                        <include>**/*IT.java</include>
+                        <include>**/*ITest.java</include>
                     </includes>
                 </configuration>
                 <executions>
@@ -220,7 +220,7 @@
                 <version>2.22.1</version>
                 <configuration>
                     <excludes>
-                        <exclude>**/*IT.java</exclude>
+                        <exclude>**/*ITest.java</exclude>
                     </excludes>
                 </configuration>
             </plugin>
