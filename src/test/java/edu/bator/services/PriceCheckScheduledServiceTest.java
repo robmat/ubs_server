@@ -1,7 +1,10 @@
 package edu.bator.services;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -64,5 +67,22 @@ class PriceCheckScheduledServiceTest {
         priceCheckScheduledService.checkPrice();
 
         verifyZeroInteractions(priceChangeNotificationService);
+    }
+    
+    @Test
+    public void matmaDlaMilli() {
+        Random random = new Random();
+        Set<String> results = new HashSet<>();
+
+        while (results.size() < 50) {
+            String result = (random.nextInt(20) + 7) + " ";
+            int operands = random.nextInt(4) + 1;
+            for (int i = 0; i < operands; i++) {
+                result += random.nextBoolean() ? "+ " : "- ";
+                result += (random.nextInt(10) + 3) + " ";
+            }
+            results.add(result + "= ");
+        }
+        results.forEach(System.out::println);
     }
 }
